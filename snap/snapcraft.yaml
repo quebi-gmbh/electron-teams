@@ -1,0 +1,79 @@
+name: electron-teams
+title: Microsoft Teams for Linux
+version: '1.0.0'
+summary: Microsoft Teams wrapped in Electron
+description: |
+  A desktop client for Microsoft Teams on Linux, providing a native
+  application experience for the web-based Teams collaboration platform.
+
+  Features:
+  - Persistent login sessions
+  - Desktop notifications
+  - System tray integration
+  - Chat, video calls, and screen sharing
+  - Seamless Microsoft authentication
+  - Team channels and collaboration tools
+
+license: MIT
+base: core22
+confinement: strict
+grade: stable
+compression: xz
+
+architectures:
+  - build-on: amd64
+
+apps:
+  electron-teams:
+    command: electron-teams/electron-teams --no-sandbox
+    extensions:
+      - gnome
+    plugs:
+      - browser-support
+      - desktop
+      - desktop-legacy
+      - gsettings
+      - home
+      - network
+      - network-bind
+      - opengl
+      - x11
+      - wayland
+      - unity7
+      - password-manager-service
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+      DISABLE_WAYLAND: 1
+
+parts:
+  electron-teams:
+    plugin: nil
+    source: .
+    override-build: |
+      # Install dependencies
+      npm install
+
+      # Build the application using electron-builder
+      npx electron-builder build --linux --dir
+
+      # Copy the built application to the install directory
+      mkdir -p $SNAPCRAFT_PART_INSTALL/electron-teams
+      cp -rv ./dist/linux-unpacked/* $SNAPCRAFT_PART_INSTALL/electron-teams/
+    build-snaps:
+      - node/18/stable
+    build-packages:
+      - unzip
+      - fakeroot
+      - dpkg
+    stage-packages:
+      - libnss3
+      - libnspr4
+      - libgtk-3-0
+      - libnotify4
+      - libuuid1
+      - libsecret-1-0
+      - libxss1
+      - libxtst6
+      - xdg-utils
+      - libgbm1
+      - libasound2

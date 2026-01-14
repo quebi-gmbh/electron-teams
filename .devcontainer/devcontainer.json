@@ -1,0 +1,38 @@
+{
+  "name": "Electron Teams Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "options": ["--progress=plain"]
+  },
+  "remoteUser": "node",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "Xvfb :99 -screen 0 1024x768x24 > /tmp/xvfb.log 2>&1 & npm install",
+  "runArgs": ["--init"],
+  "containerEnv": {
+    "DISPLAY": ":99",
+    "ELECTRON_DISABLE_SANDBOX": "1"
+  },
+  "remoteEnv": {
+    "ELECTRON_RUN_AS_NODE": ""
+  }
+}

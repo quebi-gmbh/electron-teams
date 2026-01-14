@@ -1,0 +1,104 @@
+{
+  "name": "electron-teams",
+  "version": "1.0.0",
+  "description": "Microsoft Teams wrapped in Electron for Linux",
+  "main": "src/main.js",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "bash scripts/start-novnc.sh && sh -c 'unset ELECTRON_RUN_AS_NODE && DISABLE_GPU=true DISPLAY=:99 electron . --no-sandbox'",
+    "start:dev": "sh -c 'unset ELECTRON_RUN_AS_NODE && DISABLE_GPU=true DISPLAY=:99 electron . --no-sandbox'",
+    "start:vnc": "bash scripts/start-novnc.sh",
+    "stop:vnc": "pkill -f 'x11vnc|websockify' || true",
+    "start:sandbox": "DISABLE_GPU=true electron . --no-sandbox",
+    "dist": "electron-builder --linux",
+    "dist:snap": "electron-builder --linux snap",
+    "dist:deb": "electron-builder --linux deb",
+    "dist:appimage": "electron-builder --linux AppImage",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.electron.teams",
+    "productName": "electron-teams",
+    "executableName": "electron-teams",
+    "publish": null,
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*"
+    ],
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "snap"
+      ],
+      "icon": "assets",
+      "category": "Office",
+      "desktop": {
+        "StartupWMClass": "Microsoft Teams",
+        "Name": "Microsoft Teams",
+        "GenericName": "Chat and Collaboration",
+        "Comment": "Access Microsoft Teams",
+        "Keywords": "Teams;Chat;Video;Collaboration;Microsoft;Office365;Meetings;"
+      },
+      "maintainer": "your.email@example.com"
+    },
+    "snap": {
+      "base": "core22",
+      "confinement": "strict",
+      "grade": "stable",
+      "compression": "xz",
+      "stagePackages": [
+        "libnss3",
+        "libnspr4",
+        "libgtk-3-0",
+        "libnotify4",
+        "libuuid1",
+        "libsecret-1-0",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils"
+      ],
+      "plugs": [
+        "browser-support",
+        "desktop",
+        "desktop-legacy",
+        "home",
+        "network",
+        "network-bind",
+        "x11",
+        "wayland",
+        "unity7",
+        "password-manager-service"
+      ],
+      "environment": {
+        "TMPDIR": "$XDG_RUNTIME_DIR"
+      }
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1",
+        "libsecret-1-0"
+      ],
+      "category": "Office",
+      "priority": "optional"
+    }
+  }
+}
