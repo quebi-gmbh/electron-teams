@@ -34,5 +34,15 @@
   },
   "remoteEnv": {
     "ELECTRON_RUN_AS_NODE": ""
-  }
+  },
+  "mounts": [
+    // change user "node" if needed, e.g. "vscode" for ubuntu-based images
+    // mount Claude credentials
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached",
+    // mount GitHub CLI config
+    "source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind",
+    // mount Git config
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,readonly"
+  ]
 }
