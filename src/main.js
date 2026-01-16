@@ -56,7 +56,7 @@ function createWindow() {
   // Handle permission requests (notifications, etc.)
   session.fromPartition('persist:teams').setPermissionRequestHandler(
     (webContents, permission, callback) => {
-      const allowedPermissions = ['notifications', 'clipboard-read', 'clipboard-write', 'media'];
+      const allowedPermissions = ['notifications', 'clipboard-read', 'clipboard-write', 'media', 'display-capture'];
       console.log(`Permission requested: ${permission}`);
       if (allowedPermissions.includes(permission)) {
         console.log(`Permission granted: ${permission}`);
